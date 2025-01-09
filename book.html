@@ -1,0 +1,261 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Booking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-image: url('https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover; 
+           
+            
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: transparent; 
+            background-color: rgba(15, 23, 43, .9);
+            /* background: linear-gradient(rgba(15, 23, 43, .9), rgba(15, 23, 43, .9)), */
+
+        }
+        h1{
+            color: rgb(255, 255, 255);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .lebels{
+            color: rgb(255, 255, 255);
+        }
+
+        .booking-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #434243;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+input{
+    background-color: #ffffff;
+}
+        button {
+            background-color: #fefe00f1;
+            color: rgb(13, 11, 11);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff4800;
+        }
+
+        .floor-plan {
+            margin-top: 30px;
+            text-align: center;
+        }
+       .book{
+        color: white;
+       }
+
+        .table {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .available {
+            background-color: #90EE90;
+        }
+
+        .reserved {
+            background-color: #FFB6C1;
+        }
+
+        .occupied {
+            background-color: #FF6B6B;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .booking-form {
+                padding: 15px;
+            }
+
+            .table {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Restaurant Booking System</h1>
+        </div>
+
+        <div class="booking-form">
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="name" class="lebels">Name:</label>
+                    <input type="text" id="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email"class="lebels">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="lebels">Phone:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="date" class="lebels">Date:</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="time" class="lebels">Time:</label>
+                    <input type="time" id="time" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guests" class="lebels">Number of Guests:</label>
+                    <select id="guests" required>
+                        <option value="">Select number of guests</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="special-requests" class="lebels">Special Requests:</label>
+                    <textarea id="special-requests" rows="3"></textarea>
+                </div>
+
+                <button type="submit">Book Table</button>
+            </form>
+        </div>
+
+        <div class="floor-plan">
+            <h2 class="book">Booking Table Now</h2>
+            <div id="tables"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tables = [
+                { id: 1, size: 2, status: 'available' },
+                { id: 2, size: 4, status: 'reserved' },
+                { id: 3, size: 6, status: 'occupied' },
+                { id: 4, size: 4, status: 'available' },
+                { id: 5, size: 2, status: 'available' },
+                { id: 6, size: 8, status: 'available' }
+            ];
+
+            const tablesContainer = document.getElementById('tables');
+            
+            tables.forEach(table => {
+                const tableElement = document.createElement('div');
+                tableElement.className = `table ${table.status}`;
+                tableElement.innerHTML = `
+                    <p>Table ${table.id}</p>
+                    <p>${table.size} seats</p>
+                `;
+                tableElement.addEventListener('click', () => selectTable(table));
+                tablesContainer.appendChild(tableElement);
+            });
+
+            function selectTable(table) {
+                if (table.status === 'available') {
+                    alert(`Selected Table ${table.id}`);
+                } else {
+                    alert(`Table ${table.id} is ${table.status}`);
+                }
+            }
+
+            const bookingForm = document.getElementById('bookingForm');
+            bookingForm.addEventListener('submit', handleBooking);
+        });
+
+        async function handleBooking(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                guests: document.getElementById('guests').value,
+                specialRequests: document.getElementById('special-requests').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Booking successful!');
+                    e.target.reset();
+                } else {
+                    alert('Booking failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
